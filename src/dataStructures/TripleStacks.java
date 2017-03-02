@@ -5,17 +5,12 @@ import java.util.List;
 
 public class TripleStacks {
 
-	private static List<int[]> setSets = new ArrayList<>();
+	private static List<int[]> setSets = null;
 	private static int curp = 0;
 	private static int curs = 0;
 
 	public static void main(String[] args) {
-		int[] set1 = new int[10];
-		int[] set2 = new int[10];
-		int[] set3 = new int[10];
-		setSets.add(set1);
-		setSets.add(set2);
-		setSets.add(set3);
+		
 		for(int i = 0; i < 30; i++) {
 			push(i);
 		}
@@ -26,18 +21,26 @@ public class TripleStacks {
 	}
 
 	public static boolean push(int a) {
-		if(curs < setSets.size()) {
+		if(setSets == null) {
+			setSets = new ArrayList<>();
+			int[] set = new int[10];
+			setSets.add(set);
+		}
+		
 			if(curp == 10){
 				curs++;
 				curp = 0;
 			}
+			if(curs == setSets.size()) {
+				int[] set = new int[10];
+				setSets.add(set);
+			}
+			
 			if(curp < 10) {
 				setSets.get(curs)[curp] = a;
 				curp++;
 			} 
 			return true;
-		}
-		return false;
 	}
 
 	public static int pop() {
