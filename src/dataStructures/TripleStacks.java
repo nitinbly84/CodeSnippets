@@ -8,14 +8,15 @@ public class TripleStacks {
 	private static List<int[]> setSets = null;
 	private static int curp = 0;
 	private static int curs = 0;
+	private final static int arrSize = 10;
 
 	public static void main(String[] args) {
 		
-		for(int i = 0; i < 30; i++) {
+		for(int i = 0; i < 400; i++) {
 			push(i);
 		}
 		curp--;
-		for(int i = 0; i < 30; i++) {
+		for(int i = 0; i < 500; i++) {
 			System.out.println(pop());
 		}
 	}
@@ -32,7 +33,7 @@ public class TripleStacks {
 				curp = 0;
 			}
 			if(curs == setSets.size()) {
-				int[] set = new int[10];
+				int[] set = new int[arrSize];
 				setSets.add(set);
 			}
 			
@@ -47,15 +48,17 @@ public class TripleStacks {
 		if(curp >= 0 || curs >= 0) {
 			if(curp < 0) {
 				curs--;
-				curp = 9;
+				
 				if(curs >= 0) {
+					curp = setSets.get(curs).length-1;
 					return setSets.get(curs)[curp--];
 				}
 			} else {
 				return setSets.get(curs)[curp--];
 			}
 		}
-
+		System.out.println("Stack is empty now!!!");
+		System.exit(0);
 		return 0;
 	}
 }
