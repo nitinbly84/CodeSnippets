@@ -16,6 +16,9 @@ public class TripleStacks {
 			push(i);
 		}
 		curp--;
+		
+		System.out.println(peek());
+		
 		for(int i = 0; i < 500; i++) {
 			System.out.println(pop());
 		}
@@ -60,5 +63,9 @@ public class TripleStacks {
 		System.out.println("Stack is empty now!!!");
 		System.exit(0);
 		return 0;
+	}
+	
+	public static int peek() {
+		return setSets.get(curs)[--curp];
 	}
 }
