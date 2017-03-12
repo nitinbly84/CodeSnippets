@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Maximum number of trains can cross a single platform with mishaps
+ * Maximum number of trains can cross a single platform without mishaps
  * Minimum number of platforms required to accommodate all trains.
  * Schedule for all trains is provided which has arrival & departure time
  * for all trains.
