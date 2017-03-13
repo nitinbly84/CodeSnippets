@@ -38,10 +38,7 @@ public class MaximumSum {
 			}
 		}
 		boolean result = max(Arrays.copyOf(arr, len-1));
-		/*if(result && max < max+arr[len-1]-arr[len-2]) {
-			max = max+arr[len-1]-arr[len-2];
-			return true;
-		} else*/ if(!result && max < max+arr[len-1]){
+		if(!result && max < max+arr[len-1]){
 			prev = max;
 			max = max+arr[len-1];
 			return true;
@@ -53,5 +50,4 @@ public class MaximumSum {
 		} else 
 			return false;
 	}
-
 }
