@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
- * Prints the nodes' values in breath first order
+ * Prints the nodes' values in breath first order, inorder, preorder, postorder
  * If needs the elements in the sorted order as implemented in Node
  * then use the PriorityQueue
  * @author Nitin
@@ -21,7 +21,7 @@ public class Tree {
 	static {
 		tree.value = 1;
 		Node n1 = new Node();
-		n1.value = 9;
+		n1.value = 2;
 		tree.left = n1;
 		Node n2 = new Node();
 		n2.value = 3;
@@ -33,7 +33,7 @@ public class Tree {
 		n4.value = 5;
 		n1.right = n4;
 		Node n5 = new Node();
-		n5.value = 8;
+		n5.value = 6;
 		n2.left = n5;
 		Node n6 = new Node();
 		n6.value = 7;
@@ -42,10 +42,13 @@ public class Tree {
 
 	public static void main(String[] args) {
 		st.add(tree);
-		nodeValue();
+		//		breadthFirstValues();
+		postOrderValues(tree);
 	}
 
-	static void nodeValue() {
+	static void breadthFirstValues() {
+		if(st == null)
+			return;
 		while(!st.isEmpty()) {
 			Node n = st.remove(0);
 			if(n != null) {
@@ -58,9 +61,44 @@ public class Tree {
 				st.add(n.right);
 			}
 			if(!st.isEmpty())
-				nodeValue();
+				breadthFirstValues();
 		}
+	}
 
+	static void inOrderValues(Node n) {
+		if(n == null)
+			return;
+		if(n.left != null) {
+			inOrderValues(n.left);
+		}
+		System.out.println(n.value);
+		if(n.right != null) {
+			inOrderValues(n.right);
+		}
+	}
+
+	static void postOrderValues(Node n) {
+		if(n == null)
+			return;
+		if(n.left != null) {
+			postOrderValues(n.left);
+		}
+		if(n.right != null) {
+			postOrderValues(n.right);
+		}
+		System.out.println(n.value);
+	}
+
+	static void preOrderValues(Node n) {
+		if(n == null)
+			return;
+		System.out.println(n.value);
+		if(n.left != null) {
+			preOrderValues(n.left);
+		}
+		if(n.right != null) {
+			preOrderValues(n.right);
+		}
 	}
 
 }
