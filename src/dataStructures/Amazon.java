@@ -20,20 +20,36 @@ public class Amazon {
 		String[] input2 = {"S1#40#10#101", "S2#10#5#102", "S3#90#15#103", "S1#40#15#104"};*/
 		String[] input1 = {"W1#S1", "W2#S2", "W3#S3", "W4#S1"};
 		String[] input2 = {"S1#40#10#101", "S2#10#5#102", "S3#90#15#103", "S3#91#20#104", "S2#20#5#105", "S1#20#10#106", "S1#90#15#107", "S2#30#20#108", "S3#40#5#109", "S1#50#5#110"};
-		System.out.println(Amazon.class.getClassLoader().toString());
+		long start = System.currentTimeMillis();
 		output = warehouseScalability(input1,input2);
+		System.out.println("Time taken to calculate & assign the tasks : " + (System.currentTimeMillis() - start) + "ms");
+		/**
+		 * Printing the results
+		 */
 		for(int output_i=0; output_i < output.length; output_i++) {
 			System.out.println(String.valueOf(output[output_i]));
 		}
 	}
 
+	/**
+	 * @param input1 - Array of workers with their skills
+	 * @param input2 - Array of tasks with skill required, priority, time & task id
+	 * @return - Array of strings containing the worker & tasks assigned
+	 */
 	public static String[] warehouseScalability(String[] input1,String[] input2)
 	{
 		HashMap<String, ArrayList<Worker>> workers = new HashMap<>();
+		/**
+		 * This HashMap is used to keep the number of remaining tasks related to particular skill, which helps in deciding when to use the
+		 * comparator to sort the workers.
+		 */
 		HashMap<String, Integer> skills = new HashMap<>();
 		ArrayList<Worker> pq;
 		String skill;
 
+		/**
+		 * Creating the worker objects and storing the list of workers mapped to the skill in hashmap
+		 */
 		for(String str : input1) {
 			Worker worker = new Worker();
 			skill = str.split("#")[1];
@@ -48,6 +64,9 @@ public class Amazon {
 			workers.put(skill, pq);
 		}
 
+		/**
+		 * Creating the Task objects & putting them in ArrayList
+		 */
 		ArrayList<Task> priorities = new ArrayList<>(input2.length);
 		for(String str : input2) {
 			String[] arr = str.split("#");
@@ -60,13 +79,25 @@ public class Amazon {
 			skills.put(task.skill, count+1);
 			priorities.add(task);
 		}
+		/**
+		 * Sorting the ArrayList according to the comparable logic given in Task class
+		 */
 		Collections.sort(priorities);
 
+		/**
+		 * Calculating the number of related tasks remaining to schedule & assigning the tasks accordingly to the concerned person
+		 */
 		for(Task task : priorities) {
 			ArrayList<Worker> al = workers.get(task.skill);
-			Collections.sort(al);
-//			To change the assignment order, provide the correct ordering in comparator, currently it is wrong & giving NullPointerException 
-//			Collections.sort(al, new Comps());
+			/**
+			 * If remaining related tasks are greater than 1 then sorting the workers according to the time & not designation, so using the comparator.
+			 * Currently not using the above logic to sort, currently sorting using comparator for every scenario, but user can change it per the
+			 * required assignment rules.
+			 */
+			//			if(skills.get(task.skill) >= 1)
+			Collections.sort(al, new Comps());
+			/*else
+				Collections.sort(al);*/
 			Worker worker = al.get(0);
 			ArrayList<Integer> taskIds;
 			if((taskIds = worker.taskIds) == null) {
@@ -82,6 +113,11 @@ public class Amazon {
 			worker.remSkills = skills;
 		}
 
+		/**
+		 * Fetching the results as String in ArrayList.
+		 * String[] could have been used but not using because don't know the size in advance.
+		 * So first getting results in ArrayList then converting that String[] to return.
+		 */
 		ArrayList<String> assign = new ArrayList<>();
 		for(ArrayList<Worker> al : workers.values()) {
 			for(Worker worker : al) {
@@ -94,11 +130,19 @@ public class Amazon {
 				assign.add(str);
 			}
 		}
+		/**
+		 * Sorting the ArrayList according to the designation of workers to get the proper formatted output
+		 */
+		Collections.sort(assign);
 		String[] values = new String[assign.size()];
 		return assign.toArray(values);
 	}
 }
 
+/**
+ * @author Nitin
+ *
+ */
 class Worker implements Comparable<Worker>{
 	String designation;
 	String skill;
@@ -116,17 +160,18 @@ class Worker implements Comparable<Worker>{
 	}
 }
 
+/**
+ * This comparator is used to sort the Worker objects in different way than mentioned in Worker class.
+ * @author Nitin
+ *
+ */
 class Comps implements Comparator<Worker> {
 
 	@Override
 	public int compare(Worker o1, Worker o2) {
-		if(o1.time < o2.time && o1.taskIds != null && o2.taskIds != null && o1.taskIds.size() < o2.taskIds.size())
+		if(o1.time < o2.time)
 			return -1;
-		else if(o1.time > o2.time && o1.taskIds != null && o2.taskIds != null && o1.taskIds.size() > o2.taskIds.size())
-			return 1;
-		else if(o1.time < o2.time && o1.taskIds == null && o1.remSkills != null && o1.remSkills.get(o1.skill)!= 0 && o1.remSkills.get(o1.skill) > 0)
-			return -1;
-		else if(o1.time > o2.time && o2.taskIds == null && o1.remSkills != null && o1.remSkills.get(o1.skill)!= 0 && o1.remSkills.get(o1.skill) > 0)
+		else if(o1.time > o2.time)
 			return 1;
 		else
 			return o1.designation.compareTo(o2.designation);
@@ -134,6 +179,10 @@ class Comps implements Comparator<Worker> {
 
 }
 
+/**
+ * @author Nitin
+ *
+ */
 class Task implements Comparable<Task>{
 	int taskId;
 	String skill;
