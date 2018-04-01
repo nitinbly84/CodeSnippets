@@ -10,7 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 
 /**
- * Tested below code for xlsx, txt & docx & working but not working image files.
+ * Tested below code for xlsx, txt & docx & working but not working for image files. Check Base64Image.java for image files
  * @author nitin
  *
  */
