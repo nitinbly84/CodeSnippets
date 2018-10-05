@@ -2,7 +2,8 @@ package algorithms;
 
 public class MoveZeroes {
 
-	static int[] arr = {1, 2, 0, 3, 0, 1, 2};
+//	static int[] arr = {1, 2, 0, 3, 0, 1, 2};
+	static int[] arr = {1, 2, 0, 3, 0, 1, 2, 0};
 
 	public static void main(String[] args) {
 		move(arr);
