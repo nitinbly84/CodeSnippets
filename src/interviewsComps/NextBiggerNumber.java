@@ -1,4 +1,4 @@
-package interviews;
+package interviewsComps;
 
 public class NextBiggerNumber {
 	public static void main(String[] args) {
