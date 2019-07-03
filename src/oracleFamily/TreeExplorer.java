@@ -56,25 +56,5 @@ public interface TreeExplorer extends Iterator<List> {
 	 * @return
 	 */
 	public boolean inFamily(String personId, String familyId);
-	/**
-	 * Provides a set of relationtypes, the given person has in
-	 * its family tree.
-	 * @param pId
-	 * @return
-	 */
-	public Set<RelationshipType> getRelationNames(String pId);
-	/**
-	 * Provides the relationtype between given two persons.
-	 * @param from
-	 * @param to
-	 * @return
-	 */
-	public RelationshipType findRelation(String from, String to);
-	/**
-	 * Provides a list of relationships, the given person has.
-	 * @param pId
-	 * @return
-	 */
-	public List<Relationship> getRelations(String pId);
 
 }

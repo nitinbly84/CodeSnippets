@@ -16,9 +16,6 @@ public class MainExecutor {
 
 	private TreeBuilder ftb = new FamilyTreeBuilder();
 	private TreeExplorer fte;
-	private ReadDatabase readDatabase = new ReadDatabase();
-	private PersistFamily persistFamily = new PersistFamily();
-	private DisplayTree displayTree = new DisplayTree();
 	String familyId;
 
 	public String createFamilyTree(String familyName) {
@@ -30,10 +27,6 @@ public class MainExecutor {
 			e.printStackTrace();
 		}
 		return familyId;
-	}
-
-	public void deleteFamilyTree(String familyId) {
-		ftb.deleteFamily(familyId);
 	}
 
 	public String addPerson(String personName) {
@@ -54,26 +47,6 @@ public class MainExecutor {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public void deleteRelationship(Relationship relationship, String familyId) {
-		ftb.deleteRelationship(relationship, familyId);
-	}
-
-	public void loadData(String personId) {
-		readDatabase.loadFamilyTree(personId);
-	}
-
-	public void loadFamilyTree(String familyId) {
-		readDatabase.loadFamily(familyId);
-	}
-
-	public void persistFamilyTree(String familyId) {
-		persistFamily.persistFamily(familyId);
-	}
-
-	public void deleteFamilyFromDB(String familyId) {
-		persistFamily.deleteFamily(familyId);
 	}
 
 	/**
@@ -191,36 +164,6 @@ public class MainExecutor {
 			start = false;
 		}
 		return people;
-	}
-
-	/**
-	 * Displays the Persons & their relationships in the
-	 * family tree of the given person.
-	 * @param personId
-	 */
-	public void showPersonTree(String personId) {
-		readPersonTree(personId);
-		List<String> people = readPersonTree(personId);
-		/*
-		 * Process the above list to convert the data to list of
-		 * hashmap with person & its relation
-		 */
-		List<HashMap<String, String>> tree = new ArrayList<>();
-		displayTree.showPersonTree(tree);
-	}
-
-	/**
-	 * Displays the Persons & their relationships in the
-	 * given family tree.
-	 * @param familyId
-	 */
-	public void showFamilyTree(String familyId) {
-		List<String> persons = readFamilyTree(familyId);
-		/*
-		 * Convert the above list to populate the below map.
-		 */
-		Map<String, List<String>> people = new HashMap<>();
-		displayTree.showfamilyTree(people);
 	}
 
 }

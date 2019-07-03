@@ -130,34 +130,6 @@ public class FamilyTreeExplorer implements TreeExplorer {
 	}
 
 	@Override
-	public Set<RelationshipType> getRelationNames(String pId) {
-		Set<RelationshipType> relationNames = new HashSet<>();
-		person.getChildren().forEach(rs -> relationNames.add(rs.getRelationName()));
-		person.getOthers().forEach(rs -> relationNames.add(rs.getRelationName()));
-		person.getParents().forEach(rs -> relationNames.add(rs.getRelationName()));
-		person.getSiblings().forEach(rs -> relationNames.add(rs.getRelationName()));
-
-		return relationNames;
-	}
-
-	@Override
-	public List<Relationship> getRelations(String pId) {
-		Person person = PeopleRepository.PEOPLE.getPerson(pId);
-		List<Relationship> relations = new ArrayList<>();
-		person.getChildren().forEach(rs -> relations.add(rs));
-		person.getOthers().forEach(rs -> relations.add(rs));
-		person.getParents().forEach(rs -> relations.add(rs));
-		person.getSiblings().forEach(rs -> relations.add(rs));
-
-		return relations;
-	}
-
-	@Override
-	public RelationshipType findRelation(String from, String to) {
-		return ftb.getRelationship(from, to);
-	}
-
-	@Override
 	public boolean isFamily(String familyId) {
 		return ftb.isFamily(familyId);
 	}

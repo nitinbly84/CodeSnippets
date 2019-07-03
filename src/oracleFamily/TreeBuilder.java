@@ -17,13 +17,6 @@ public interface TreeBuilder {
 	 */
 	public Relationship createRelationship(RelationshipType rt, String parentId, String childId, String familyId) throws Exception;
 	/**
-	 * Deletes the relationship from the given family. 
-	 * @param relationship
-	 * @param familyId
-	 * @return
-	 */
-	public Relationship deleteRelationship(Relationship relationship, String familyId);
-	/**
 	 * Creates a family with given name.
 	 * @param name
 	 * @return
@@ -47,16 +40,4 @@ public interface TreeBuilder {
 	 * @return
 	 */
 	public boolean isFamily(String familyId);
-	/**
-	 * Provides the relationship between the given two persons.
-	 * @param parentId
-	 * @param childId
-	 * @return
-	 */
-	public RelationshipType getRelationship(String parentId, String childId);
-	/**
-	 * Deletes the family from the application.
-	 * @param familyId
-	 */
-	public void deleteFamily(String familyId);
 }

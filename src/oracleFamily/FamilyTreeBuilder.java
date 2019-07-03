@@ -68,41 +68,7 @@ public class FamilyTreeBuilder implements TreeBuilder {
 	}
 
 	/**
-	 *Deletes the relationship from the family & its people, if they have it.
-	 */
-	@Override
-	public Relationship deleteRelationship(Relationship relationship, String familyId) {
-		Family family = families.get(familyId);
-		if(family == null)
-			return null;
-		HashMap<String, String> familyPeople = family.getFamily();
-		HashMap<String, Relationship> relations = family.getRelations();
-		Person parent = PeopleRepository.PEOPLE.getPerson(relationship.getParent());
-		Person child = PeopleRepository.PEOPLE.getPerson(relationship.getChild());
-		if(familyPeople.containsKey(parent.getId())) {
-			if(relationship.getRelationName().equals(RelationshipType.FATHER)
-					|| relationship.getRelationName().equals(RelationshipType.MOTHER)) {
-				parent.getChildren().remove(relationship);
-				child.getParents().remove(relationship);
-			}
-			else if(relationship.getRelationName().equals(RelationshipType.SIBLING)
-					|| relationship.getRelationName().equals(RelationshipType.SPOUSE)) {
-				parent.getSiblings().remove(relationship);
-				child.getSiblings().remove(relationship);
-			}
-			else if(relationship.getRelationName().equals(RelationshipType.FRIEND)
-					|| relationship.getRelationName().equals(RelationshipType.OTHER)) {
-				parent.getOthers().remove(relationship);
-				child.getOthers().remove(relationship);
-			}
-			return relations.remove(relationship.getId());
-		}
-		return null;
-	}
-
-	/**
 	 * Inner class representing the 'Family' for this instance.
-	 *
 	 */
 	class Family {
 		private String familiyId;
@@ -184,22 +150,6 @@ public class FamilyTreeBuilder implements TreeBuilder {
 		return families.containsKey(familyId);
 	}
 
-	@Override
-	public RelationshipType getRelationship(String parentId, String childId) {
-		Person parent = PeopleRepository.PEOPLE.getPerson(parentId);
-		Person child = PeopleRepository.PEOPLE.getPerson(childId);
-		HashMap<String, Relationship> relations = families.get(parent.getFamilyId()).getRelations();
-		Set<String> keys = relations.keySet();
-		for(String key : keys) {
-			Relationship relation = relations.get(key);
-			if((relation.getChild().equals(child) && relation.getParent().equals(parent))
-					|| (relation.getChild().equals(parent) && relation.getParent().equals(child)))
-				return relation.getRelationName();
-		}
-		return null;
-
-	}
-
 	/**
 	 * Provides the common family ID for the given two persons.
 	 * Currently it's main task is to check if two given person have any
@@ -229,11 +179,6 @@ public class FamilyTreeBuilder implements TreeBuilder {
 		if(exists)
 			throw new Exception("Both persons are already related.");
 		return familyId;
-	}
-
-	@Override
-	public void deleteFamily(String familyId) {
-		families.remove(familyId);
 	}
 
 }
