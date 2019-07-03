@@ -15,7 +15,7 @@ public class FamilyTreeBuilder implements TreeBuilder {
 	private static HashMap<String, Family> families = new HashMap<>();
 
 	/**
-	 * Adds the person to the 
+	 * Adds the person to this family with the given rationship
 	 * @param family
 	 * @param pId
 	 * @param relation
@@ -48,6 +48,7 @@ public class FamilyTreeBuilder implements TreeBuilder {
 		Person child = PeopleRepository.PEOPLE.getPerson(childId);
 		if(rt.equals(RelationshipType.SELF) && parent != null && child == null && family != null) {
 			family.setRoot(parentId);
+			parent.addFamilyId(familyId);
 			return null;
 		} else if(rt.equals(RelationshipType.NONE) || parent == null || child == null || family == null)
 			return null;
@@ -59,11 +60,18 @@ public class FamilyTreeBuilder implements TreeBuilder {
 		rs.setChild(child.getId());
 		rs.setParent(parent.getId());
 		rs.setRelationName(rt);
-		check(parentId,childId);
+		if(check(parentId,childId))
+			return null;
 		relations.put(rs.getId(), rs);
 		addPerson(parent, rs);
 		familyPeople.put(childId, childId);
-//		addPerson(familyPeople, child, rs);
+		if(child.getFamilyId() == null) {
+			child.addFamilyId(familyId);
+		}
+		if(parent.getFamilyId() == null) {
+			parent.addFamilyId(familyId);
+		}
+		//		addPerson(familyPeople, child, rs);
 		return rs;
 	}
 
@@ -151,34 +159,43 @@ public class FamilyTreeBuilder implements TreeBuilder {
 	}
 
 	/**
-	 * Provides the common family ID for the given two persons.
-	 * Currently it's main task is to check if two given person have any
-	 * common family.
-	 * else throws the exception.
-	 * Exception can be removed in future, also return type can change
-	 * to the list of common family IDs as 2 persons can have multiple
-	 * common family IDs.
+	 * Checks if provided two person are related
 	 * @param parentId
 	 * @param childId
-	 * @return
+	 * @return boolean
 	 * @throws Exception
 	 */
-	public static String check(String parentId, String childId) throws Exception {
-		Set<String> familyId1 = PeopleRepository.PEOPLE.getPerson(parentId).getFamilyId();
-		Set<String> familyId2 = PeopleRepository.PEOPLE.getPerson(childId).getFamilyId();
-		boolean exists = false;
-		String familyId = "";
-		for(String str : familyId1) {
-			if(familyId2.contains(str)) {
-				exists = true;
-				familyId = str;
-				break;
-			}
-		}
+	public static boolean check(String parentId, String childId) throws Exception {
 
-		if(exists)
-			throw new Exception("Both persons are already related.");
-		return familyId;
+		Set<Relationship> relations = PeopleRepository.PEOPLE.getPerson(parentId).getChildren();
+		for(Relationship rs : relations) {
+			if(rs.getChild() == childId && rs.getParent() == parentId)
+				return true;
+			if(rs.getChild() == parentId && rs.getParent() == childId)
+				return true;
+		}
+		relations = PeopleRepository.PEOPLE.getPerson(parentId).getOthers();
+		for(Relationship rs : relations) {
+			if(rs.getChild() == childId && rs.getParent() == parentId)
+				return true;
+			if(rs.getChild() == parentId && rs.getParent() == childId)
+				return true;
+		}
+		relations = PeopleRepository.PEOPLE.getPerson(parentId).getParents();
+		for(Relationship rs : relations) {
+			if(rs.getChild() == childId && rs.getParent() == parentId)
+				return true;
+			if(rs.getChild() == parentId && rs.getParent() == childId)
+				return true;
+		}
+		relations = PeopleRepository.PEOPLE.getPerson(parentId).getSiblings();
+		for(Relationship rs : relations) {
+			if(rs.getChild() == childId && rs.getParent() == parentId)
+				return true;
+			if(rs.getChild() == parentId && rs.getParent() == childId)
+				return true;
+		}
+		return false;
 	}
 
 }

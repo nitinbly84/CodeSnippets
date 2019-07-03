@@ -10,7 +10,7 @@ import java.util.Set;
 public class Person {
 	
 	private String id;
-	private Set<String> familyId = new HashSet<>();
+	private String familyId;
 	private String name;
 	private boolean isActive;
 	private static int counter = 0;
@@ -58,7 +58,7 @@ public class Person {
 	}
 
 	public void setSiblings(Relationship relationship) throws Exception {
-		siblings.add(relationship);;
+		siblings.add(relationship);
 	}
 
 	public Set<Relationship> getChildren() {
@@ -92,33 +92,29 @@ public class Person {
 	}
 	
 	/**
-	 * Returns a set of familyIDs associated to this
-	 * person.
+	 * Returns familyId associated to this person.
 	 * @return Set<String>
 	 */
-	public Set<String> getFamilyId() {
-		Set<String> familyIds = new HashSet<>();
-		familyIds.addAll(familyId);
-		return familyIds;
+	public String getFamilyId() {
+		return familyId;
 	}
 	
 	/**
-	 * Adds the given familyID to the set of
-	 * associated familyIDs to this person.
-	 * @param Id
+	 * Adds the given familyID to this person.
+	 * @param familyId
 	 */
-	public void addFamilyId(String Id) {
-		familyId.add(id);
+	public void addFamilyId(String familyId) {
+		this.familyId = familyId;
 	}
 	
 	/**
-	 * Removes the given familyID from the set of associated
-	 * familyIDs of this person.
+	 * Removes the given familyID from this person.
 	 * @param id
 	 * @return
 	 */
 	public boolean removeFamilyId(String id) {
-		return familyId.remove(id);
+		familyId = null;
+		return true;
 	}
 	
 }

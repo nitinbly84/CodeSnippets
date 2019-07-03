@@ -8,29 +8,29 @@ import java.util.Set;
  * Interface to represent the responsibilities of Family tree explorer in the application
  *
  */
-public interface TreeExplorer extends Iterator<List> {
+public interface TreeExplorer extends Iterator<List<Object>> {
 
 	/**
-	 * Returns the Persons at the root of the family tree
+	 * Returns the Person at the root of the family tree
 	 * of the given person.
 	 * @param pId
-	 * @return
+	 * @return Person ID of the person at the root of its family tree.
 	 */
-	public Set<String> getRoots(String pId);
+	public String getRoots(String pId);
 	/**
 	 * Returns the immediate parents of the given person from
 	 * its family tree.
 	 * @param pId
-	 * @return
+	 * @return Set of Person IDs for the next parents of this person.
 	 */
 	public Set<String> getImmediateParents(String pId);
-	
+
 	/**
 	 * Sets the start of the family tree to read from.
 	 * @param pId
 	 */
 	public void setStart(String pId);
-	
+
 	/**
 	 * Sets the family id to read its tree from roots.
 	 * @param familyId
@@ -40,20 +40,20 @@ public interface TreeExplorer extends Iterator<List> {
 	 * Checks if the given person exists in the repository
 	 * whether dead or alive.
 	 * @param pId
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isPresent(String pId);
 	/**
 	 * Checks if the family exists.
 	 * @param familyId
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isFamily(String familyId);
 	/**
 	 * Checks if the given person exists in the given family.
 	 * @param personId
 	 * @param familyId
-	 * @return
+	 * @return boolean
 	 */
 	public boolean inFamily(String personId, String familyId);
 

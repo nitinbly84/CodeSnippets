@@ -1,12 +1,9 @@
 package oracleFamily;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 
 /**
  * It is the entry class for activities on the family tree.
@@ -29,15 +26,32 @@ public class MainExecutor {
 		return familyId;
 	}
 
+	/**Adds the person with the given name to the system.
+	 * @param personName
+	 * @return - Person ID
+	 */
 	public String addPerson(String personName) {
 		String personId = PeopleRepository.PEOPLE.createPerson(personName);
 		return personId;
 	}
 
+	/**
+	 * Updates the name of the given person.
+	 * @param personId
+	 * @param name
+	 */
 	public void updatePerson(String personId, String name) {
 		PeopleRepository.PEOPLE.updatePerson(personId, name);
 	}
 
+	/**
+	 * Creates the relationship in the given family for the given type & persons.
+	 * @param rt
+	 * @param parentId
+	 * @param childId
+	 * @param familyId
+	 * @return - Relationship ID
+	 */
 	public String createRelationship(RelationshipType rt, String parentId, String childId, String familyId) {
 		try {
 			Relationship rs = ftb.createRelationship(rt, parentId, childId, familyId);
@@ -55,12 +69,8 @@ public class MainExecutor {
 	 * @param personId
 	 */
 	public List<String> readPersonTree(String personId) {
-		Set<String> roots = fte.getRoots(personId);
-		List<String> people = new ArrayList<>();
-		while(fte.hasNext()) {
-			people.add(((Person)fte.next().get(1)).getName());
-		}
-		return people;
+		String root = fte.getRoots(personId);
+		return readDescendants(root);
 	}
 
 	/**
@@ -69,24 +79,12 @@ public class MainExecutor {
 	 */
 	public List<String> readFamilyTree(String familyId) {
 		String personId = ftb.getFamilyPerson(familyId);
-		Set<String> roots = fte.getRoots(personId);
-		List<String> people = new ArrayList<>();
-		boolean start = true;
-		for(String id : roots) {
-			fte.setStart(personId);
-			while(fte.hasNext()) {
-				String str = ((Person)fte.next().get(1)).getName();
-				if(start || str.contains(RelationshipType.OTHER.toString()))
-					people.add(str);
-			}
-			start = false;
-		}
-		return people;
+		String root = fte.getRoots(personId);
+		return readDescendants(personId);
 	}
 
 	/**
-	 * Reads all the descendant persons or the person which are at the
-	 * same level as this person.
+	 * Reads all the descendant persons.
 	 * @param personId
 	 * @return
 	 */
@@ -145,25 +143,6 @@ public class MainExecutor {
 				}
 			}
 		}
-	}
-
-	public List<String> readAnscestors(String personId) {
-		Set<String> roots = fte.getRoots(personId);
-		String endName = PeopleRepository.PEOPLE.getPerson(personId).getName();
-		List<String> people = new ArrayList<>();
-		boolean start = true;
-		for(String str : roots) {
-			fte.setStart(personId);
-			while(fte.hasNext()) {
-				String text = ((Person)fte.next().get(1)).getName();
-				if(start || !text.startsWith(endName))
-					people.add(str);
-				else
-					break;
-			}
-			start = false;
-		}
-		return people;
 	}
 
 }

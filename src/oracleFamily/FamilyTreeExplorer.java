@@ -1,13 +1,10 @@
 package oracleFamily;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import javax.management.relation.RelationType;
 
 public class FamilyTreeExplorer implements TreeExplorer {
 
@@ -27,27 +24,13 @@ public class FamilyTreeExplorer implements TreeExplorer {
 	}
 
 	/**
-	 * Provides a set of Persons which represent roots of the family tree, this
+	 * Provides root Person of the family tree, this
 	 * person belongs to.
 	 */
 	@Override
-	public Set<String> getRoots(String pId) {
+	public String getRoots(String pId) {
 		Person p = PeopleRepository.PEOPLE.getPerson(pId);
-		Set<String> roots = new HashSet<>();
-		while(!p.getParents().isEmpty()) {
-			Iterator<Relationship> itr = p.getParents().iterator();
-			while(itr.hasNext()) {
-				Relationship rs = itr.next();
-				if(rs.getRelationName().equals(RelationshipType.FATHER)
-						|| rs.getRelationName().equals(RelationshipType.MOTHER))
-					roots.addAll(getRoots(itr.next().getParent()));
-			}
-		}
-
-		if(roots.isEmpty())
-			roots.add(pId);
-
-		return roots;
+		return ftb.getFamilyRoot(p.getFamilyId());
 	}
 
 	/**
@@ -70,9 +53,9 @@ public class FamilyTreeExplorer implements TreeExplorer {
 	}
 
 	@Override
-	public List next() {
+	public List<Object> next() {
 
-		List result = new ArrayList();
+		List<Object> result = new ArrayList<>();
 		if(siblings.hasNext()) {
 			Relationship rs = siblings.next();
 			result.add(rs.getRelationName());
@@ -119,9 +102,9 @@ public class FamilyTreeExplorer implements TreeExplorer {
 	 */
 	public void Start(String familyId) {
 		this.familyId = familyId;
-		Iterator<String> itr = getRoots(ftb.getFamilyPerson(familyId)).iterator();
+		String root = getRoots(ftb.getFamilyPerson(familyId));
 
-		this.person = PeopleRepository.PEOPLE.getPerson(itr.next());
+		this.person = PeopleRepository.PEOPLE.getPerson(root);
 	}
 
 	@Override
