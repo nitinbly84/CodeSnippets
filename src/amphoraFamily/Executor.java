@@ -36,7 +36,7 @@ public class Executor {
 		System.out.println("Number of members in Family after adding Meher Das : " + amphora.getCountOfMembers());
 		
 		// Adding grand parent
-		System.out.println("\n--------Adding Grand parent Sushila Kumari as spouse of Sunil Jamuna Das in the family-----------");
+		System.out.println("\n---------Adding Grand parent Sushila Kumari as spouse of Sunil Jamuna Das in the family-----------");
 		Member member4 = new Member("Sushila Kumari");
 		member4.setAge(81);
 		member4.setAlive(true);
