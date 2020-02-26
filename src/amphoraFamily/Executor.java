@@ -52,12 +52,12 @@ public class Executor {
 		System.out.println("Number of members in Family after adding Sushila Kumari : " + amphora.getCountOfMembers());
 
 		// Printing the family members' names in the increasing order of their age
-		System.out.println("\n--------Members of the family in the sorted order of their age---------");
+		System.out.println("\n--------Members of the family in the sorted decreasing order of their age---------");
 		Collections.sort(amphora.getListOfMembers());
 		amphora.getListOfMembers().stream()
 		.sorted()
-		.map(mem -> mem.getName())
-		.collect(Collectors.toList())
+		.map(mem -> mem.getName()+":"+mem.getAge())
+		//		.collect(Collectors.toList())
 		.forEach(System.out::println);
 
 		// Q3 : Can be done using the binary search to find the position of insertion
@@ -79,8 +79,8 @@ public class Executor {
 		System.out.println("\n---------Kids of Jamuna Das--------------");
 		members = amphora.getMemberOfRelation(greatGrandFather, RelationType.KIDS);
 		members.stream()
-			   .map(m -> m.getName())
-		       .forEach(System.out::println);
+		.map(m -> m.getName())
+		.forEach(System.out::println);
 
 		System.out.println("\n---------Grand Kids of Amar Jamuna Das--------------");
 		Member grandFather = new Member("Amar Januna Das"); //GrandParent
@@ -111,9 +111,9 @@ public class Executor {
 		if(children.isEmpty())
 			System.out.println(parent.getName() + " has no kid....");
 		children.stream()
-		        .map(m -> m.getName())
-		        .forEach(System.out::println);
-		
+		.map(m -> m.getName())
+		.forEach(System.out::println);
+
 	}
 
 	private static void setup() {

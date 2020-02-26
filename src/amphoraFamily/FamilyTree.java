@@ -91,7 +91,7 @@ public class FamilyTree {
 	}
 
 	/**
-	 * Retrieves the list of members as per the relationship with te given member.
+	 * Retrieves the list of members as per the relationship with the given member.
 	 * @param member
 	 * @param relationType
 	 * @return
