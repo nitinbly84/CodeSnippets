@@ -5,16 +5,20 @@ import java.util.ArrayList;
 /**
  * @author Nitin Agrawal
  * @Date 26-Apr-2020
+ * Question as given on 
+ * https://www.glassdoor.co.in/Interview/CDK-Global-Senior-Java-Developer-Interview-Questions-EI_IE870191.0,10_KO11,32.htm
  */
 public class FourVarTruthTable {
 
 	public static void main(String[] args) {
-		int varCount = 6;
+		// Provide the variables count in truth table
+		int varCount = 4;
+		// Provide the digits to be present in the truth table.
 		int[] digits = {0, 1};
 		int[][] truthTable = buildTable(varCount, digits);
 		System.out.println("Number of rows : " + truthTable.length);
 		int i = 1;
-		while(i <= 6)
+		while(i <= varCount)
 			System.out.print("Var"+(i++)+" ");
 		System.out.println();
 		for(int[] row : truthTable) {
