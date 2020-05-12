@@ -34,7 +34,7 @@ public class ElementsSum {
 		return result;
 	}
 
-	private static void find(List<Integer> numbers, int start, List<Integer> combination, Set<List<Integer>> result,  int count, int sum) {
+	private static void find(List<Integer> numbers, int start, List<Integer> combination, Set<List<Integer>> result, int count, int sum) {
 		List<Integer> orgNumbers = new ArrayList<>(numbers);
 		List<Integer> orgCombination = new ArrayList<>(combination);
 		if(start < numbers.size()) {
