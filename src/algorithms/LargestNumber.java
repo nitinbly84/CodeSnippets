@@ -11,18 +11,17 @@ import java.util.Arrays;
 public class LargestNumber {
 	
 	public static void main(String[] args) {
-		String num = "423862";
+		String num = "123456";
+		System.out.println(num);
 		System.out.println(largest(num));
 		System.out.println(nextLargest(num));
 	}
 	
 	static String largest(String num) {
 		if(num == null)
-			return null;
+			return "No Answer";
 		char[] chr = num.toCharArray();
 		int len = chr.length;
-		if(len == 0)
-			return null;
 		Arrays.sort(chr);
 		char[] result = new char[len];
 		int j = 0;
@@ -35,30 +34,33 @@ public class LargestNumber {
 	
 	static String nextLargest(String num) {
 		if(num == null)
-			return null;
+			return "No Answer";
 		char[] chr = num.toCharArray();
 		int len = chr.length;
-		if(len == 0)
-			return null;
 		int stop = -1;
 		for(int i = len-1; i > 0; i--) {
-			if(chr[i] < chr[i-1])
-				continue;
-			else {
+			if(chr[i] > chr[i-1]) {
 				stop = i-1;
 				break;
-			}				
+			}
 		}
-		char temp = chr[stop];
-		chr[stop] = chr[stop+2];
-		chr[stop+2] = temp;
+		if(stop == -1)
+			return "No Answer";
 		char[] in = new char[len-stop-1];
+		char temp = chr[stop];
 		in = Arrays.copyOfRange(chr, stop+1, len);
 		Arrays.sort(in);
+		len = 0;
+		for(char c : in) {
+			if(temp < c) {
+				in[len] = temp;
+				chr[stop] = c;
+			}
+			len++;
+		}
 		for(char c : in) {
 			chr[++stop] = c;
 		}
-		
 		return String.copyValueOf(chr);
 	}
 
