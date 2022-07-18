@@ -1,11 +1,12 @@
 package codility;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
+// Golden Award : https://app.codility.com/cert/view/certVN2TFA-VZ2GK39W44R69TUY/details/ --Outperforms Best soln for performance Tests
+// Golden Award : https://app.codility.com/cert/view/certUZ73KX-HPUGS2CFN4T6W68P/details/ --Outperforms Best soln for performance Tests
+// Golden Award : https://app.codility.com/cert/view/certCFHG3G-Y3MR3KVGEXQVM4NG/details/ --Pure Implementation but bit better than the Best
 // Golden Award : https://app.codility.com/cert/view/certM7JSYV-XTUTBN85DUNAAQEM/details/ --Pure implementation slower due to TreeMap
 // Golden Award : https://app.codility.com/cert/view/certPAR7J7-YS3KDD9WQGBM7KVX/details/ --Pure implementation with best performance
 // Golden Award : https://app.codility.com/cert/view/certJQYRH3-D2CRBK7WAS8T9AJE/details/
@@ -27,31 +28,37 @@ public class JurassicCode {
 	public static int solution(int[] X, int[] Y, String colors) {
 		int count = X.length;
 		int result = 0;
-		SortedMap<Long, List<Character>> colorMap = new TreeMap<>();
-		List<Character> chars = null;
+		Map<Integer, int[]> colorMap = new HashMap<>();
+		int[] cols = null;
+		int[] dists = new int[count]; 
 
 		for(int i = 0; i < count; i++) {
-			long dist = X[i]*X[i] + Y[i]*Y[i];
+			int dist = X[i]*X[i] + Y[i]*Y[i];
+			dists[i] = dist;
 			Character col = colors.charAt(i);
-			if((chars=colorMap.get(dist)) == null) {
-				chars = new ArrayList<>();
-				colorMap.put(dist, chars);
+			if((cols=colorMap.get(dist)) == null) {
+				cols = new int[2];
+				colorMap.put(dist, cols);
 			}
-			chars.add(col);
+			if(col == 'R')
+				cols[0]++;
+			else
+				cols[1]++;
 		}
-		int countR = 0;
-		int countG = 0;
 
-		for(Map.Entry<Long, List<Character>> entry : colorMap.entrySet()) {
-			List<Character> cols = entry.getValue();
-			for(char col : cols) {
-				if(col == 'R')
-					countR++;
-				else if(col == 'G')
-					countG++;
-			}
-			if(countR == countG)
-				result = countR+countG;
+		Arrays.sort(dists);
+		int colR = 0;
+		int colG = 0;
+		int prev = 0;
+		for(int dist : dists) {
+			if(prev == dist)
+				continue;
+			int[] colrs = colorMap.get(dist);
+			colR+=colrs[0];
+			colG+=colrs[1];
+			if(colR == colG)
+				result = colR+colG;
+			prev = dist;
 		}
 		return result;
 	}
