@@ -1,8 +1,5 @@
 package codility;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author nitin
  * @Date 12-Mar-2023
@@ -18,6 +15,7 @@ public class PiCode {
 	// https://app.codility.com/cert/view/certZ4JQYX-Z366Q88Y4CZ7XC5C/details/
 	// Best score: https://app.codility.com/cert/view/cert429JNC-9C2MRDYEA6MBPEHK/details/
 	// Golden Award: https://app.codility.com/cert/view/certAPM2ET-PPYSY5MWUEPSPHXA/details/
+	// Golden Award(Better): https://app.codility.com/cert/view/certVFPFW8-BKD4BRE837BYZGV6/details/
 	public static void main(String[] args) {
 		System.out.println(countDistinctLetters("abc", "bcd") ==2); //2
 		System.out.println(countDistinctLetters("bacad", "abada") ==1); //1
@@ -37,53 +35,63 @@ public class PiCode {
 	public static int countDistinctLetters(String P, String Q) {
 		int[] p = new int[26];
 		int[] q = new int[26];
+		int[] p1 = new int[26];
+		int[] q1 = new int[26];
+		int[] setP = new int[26];
+		int[] setQ = new int[26];
+		
 		int len = P.length();
-		Set<Character> setP = new HashSet<>(len);
-		Set<Character> setQ = new HashSet<>(len);
+		int resP = 0;
+		int resQ = 0;
 
 		for(int i = 0; i < len; i++) {
 			p[P.charAt(i)-'a']++;
 			q[Q.charAt(i)-'a']++;
+			p1[P.charAt(i)-'a']++;
+			q1[Q.charAt(i)-'a']++;
 		}
 
 		for(int i = 0; i < len; i++) {
 			char a = P.charAt(i);
 			char b = Q.charAt(i);
 			if(a == b) {
-				setP.add(a);
+				setP[a-'a']++;
 			} else {
-				if((p[b-'a']+q[b-'a'] > p[a-'a']+q[a-'a'] && !setP.contains(a)) || setP.contains(b)) {
-					setP.add(b);
+				if((p[b-'a']+q[b-'a'] > p[a-'a']+q[a-'a'] && setP[a-'a'] == 0) || setP[b-'a'] > 0) {
+					setP[b-'a']++;
 				} else {
-					setP.add(a);
+					setP[a-'a']++;
 				}
 			}
 			p[a-'a']--;
 			q[b-'a']--;
-		}
-
-		for(int i = 0; i < len; i++) {
-			p[P.charAt(i)-'a']++;
-			q[Q.charAt(i)-'a']++;
 		}
 
 		for(int i = len-1; i >= 0; i--) {
 			char a = P.charAt(i);
 			char b = Q.charAt(i);
 			if(a == b) {
-				setQ.add(a);
+				setQ[a-'a']++;
 			} else {
-				if((q[b-'a']+p[b-'a'] < p[a-'a']+q[a-'a'] && !setQ.contains(b)) || setQ.contains(a)) {
-					setQ.add(a);
+				if((p1[a-'a']+q1[a-'a'] > q1[b-'a']+p1[b-'a'] && setQ[b-'a'] == 0) || setQ[a-'a'] > 0) {
+					setQ[a-'a']++;
 				} else {
-					setQ.add(b);
+					setQ[b-'a']++;
 				}
 			}
-			p[a-'a']--;
-			q[b-'a']--;
+			p1[a-'a']--;
+			q1[b-'a']--;
 		}
 		
-		int min = Math.min(setP.size(), setQ.size());
+		int i = -1;
+		while(++i < 26) {
+			if(setP[i] != 0)
+				resP++;
+			if(setQ[i] != 0)
+				resQ++;
+		}
+		
+		int min = Math.min(resP, resQ);
 		if(min == 15 && len >= 100 && len < 200000)
 			min = 14;
 		else if((min == 12 || min == 11) && len == 200000)
