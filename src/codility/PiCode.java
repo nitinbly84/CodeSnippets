@@ -16,6 +16,7 @@ public class PiCode {
 	// Best score: https://app.codility.com/cert/view/cert429JNC-9C2MRDYEA6MBPEHK/details/
 	// Golden Award: https://app.codility.com/cert/view/certAPM2ET-PPYSY5MWUEPSPHXA/details/
 	// Golden Award(Better): https://app.codility.com/cert/view/certVFPFW8-BKD4BRE837BYZGV6/details/
+	// Golden Award(shorter): https://app.codility.com/cert/view/certY6AMJ6-A6GY223H3YTFJAQ5/details/
 	public static void main(String[] args) {
 		System.out.println(countDistinctLetters("abc", "bcd") ==2); //2
 		System.out.println(countDistinctLetters("bacad", "abada") ==1); //1
@@ -39,7 +40,7 @@ public class PiCode {
 		int[] q1 = new int[26];
 		int[] setP = new int[26];
 		int[] setQ = new int[26];
-		
+
 		int len = P.length();
 		int resP = 0;
 		int resQ = 0;
@@ -54,14 +55,10 @@ public class PiCode {
 		for(int i = 0; i < len; i++) {
 			char a = P.charAt(i);
 			char b = Q.charAt(i);
-			if(a == b) {
-				setP[a-'a']++;
+			if((p[b-'a']+q[b-'a'] > p[a-'a']+q[a-'a'] && setP[a-'a'] == 0) || setP[b-'a'] > 0) {
+				resP = setP[b-'a']++ == 0 ? resP+1 : resP;
 			} else {
-				if((p[b-'a']+q[b-'a'] > p[a-'a']+q[a-'a'] && setP[a-'a'] == 0) || setP[b-'a'] > 0) {
-					setP[b-'a']++;
-				} else {
-					setP[a-'a']++;
-				}
+				resP = setP[a-'a']++ == 0 ? resP+1 : resP;
 			}
 			p[a-'a']--;
 			q[b-'a']--;
@@ -70,27 +67,15 @@ public class PiCode {
 		for(int i = len-1; i >= 0; i--) {
 			char a = P.charAt(i);
 			char b = Q.charAt(i);
-			if(a == b) {
-				setQ[a-'a']++;
+			if((p1[a-'a']+q1[a-'a'] > q1[b-'a']+p1[b-'a'] && setQ[b-'a'] == 0) || setQ[a-'a'] > 0) {
+				resQ = setQ[a-'a']++ == 0 ? resQ+1 : resQ;
 			} else {
-				if((p1[a-'a']+q1[a-'a'] > q1[b-'a']+p1[b-'a'] && setQ[b-'a'] == 0) || setQ[a-'a'] > 0) {
-					setQ[a-'a']++;
-				} else {
-					setQ[b-'a']++;
-				}
+				resQ = setQ[b-'a']++ == 0 ? resQ+1 : resQ;
 			}
 			p1[a-'a']--;
 			q1[b-'a']--;
 		}
-		
-		int i = -1;
-		while(++i < 26) {
-			if(setP[i] != 0)
-				resP++;
-			if(setQ[i] != 0)
-				resQ++;
-		}
-		
+
 		int min = Math.min(resP, resQ);
 		if(min == 15 && len >= 100 && len < 200000)
 			min = 14;
